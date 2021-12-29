@@ -4,7 +4,7 @@
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const ESLintPlugin = require( 'eslint-webpack-plugin' );
-const { Exception, Timer, FsInterface, isPojo } = require( '../../../node-util/index.js' );
+const { Exception, Timer, FsInterface, isPojo } = require( '@squirrel-forge/node-util' );
 
 /**
  * SimpleWebpack exception
