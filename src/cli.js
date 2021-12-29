@@ -265,12 +265,14 @@ module.exports = async function cli() {
         process.exit( 1 );
     } else {
         const info = stats.webpack.toJson( { all : false, assets : true, warnings : true } );
-        if ( swp.verbose ) {
-            if ( stats.webpack.hasWarnings() ) {
-                cfx.warn( 'Webpack warnings:' );
-                cfx.log( getWarningsWithoutHeading( stats.webpack ) );
+        if ( stats.webpack.hasWarnings() && ( swp.verbose || swp.strict ) ) {
+            cfx.warn( 'Webpack warnings:' );
+            cfx.log( getWarningsWithoutHeading( stats.webpack ) );
+            if ( swp.verbose ) {
                 cfx.success( 'Output files:' );
             }
+        }
+        if ( swp.verbose ) {
             for ( let i = 0; i < info.assets.length; i++ ) {
                 cfx.info( getFileStats( info.assets[ i ] ).join( ' ' ) );
             }
@@ -321,7 +323,7 @@ module.exports = async function cli() {
             so[ files_prop ].push( '' );
         }
 
-        if ( !swp.verbose && stats.webpack.hasWarnings() ) {
+        if ( !swp.verbose && !swp.strict && stats.webpack.hasWarnings() ) {
             so.Warnings = getWarningsWithoutHeading( stats.webpack );
         }
 
