@@ -259,7 +259,7 @@ class SimpleWebpack {
         } else if ( isPojo( options.extend ) ) {
             Object.assign( config, options.extend );
         }
-        return { source, target, options, config };
+        return { options, source, target, config };
     }
 
     /**
@@ -355,9 +355,9 @@ class SimpleWebpack {
         this.timer.start( 'total-run' );
         const setup = await this.generateConfig( source, target, options );
         const stats = {
+            options : setup.options,
             source : setup.source,
             target : setup.target,
-            options : setup.options,
             config : setup.config,
             webpack : null,
             time : null,
