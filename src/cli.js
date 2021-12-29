@@ -56,8 +56,11 @@ module.exports = async function cli() {
         // Color limits
         colors : [ '-w', '--colors', '', false ],
 
+        // Show config
+        config : [ '-y', '--show-config', false, true ],
+
         // Do not break on any error, disables the default strict if set
-        loose : [ '-u', '--loose', null, true ],
+        loose : [ '-u', '--loose', false, true ],
 
     } );
 
@@ -142,6 +145,20 @@ module.exports = async function cli() {
         cfx.warn( 'Running in strict mode!' );
     }
 
+    // Show active config object
+    if ( options.config ) {
+        const config = await swp.generateConfig( source, target, options );
+        cfx.success( 'simple-webpack configuration:' );
+        const entries = Object.entries( config );
+        for ( let i = 0; i < entries.length; i++ ) {
+            const [ name, data ] = entries[ i ];
+            cfx.error( '  ' + name + '  ' );
+            cfx.log( data );
+        }
+        cfx.log( '' );
+        process.exit( 0 );
+    }
+
     // Init progress spinner, stats and count
     const spinner = new Progress();
     const stDi = new StatsDisplay( cfx );
@@ -201,7 +218,24 @@ module.exports = async function cli() {
         return [ seconds, ( ms - seconds * 1000 ) * 1000000 ];
     };
 
+    /**
+     * Get webpack warnings without heading
+     * @param {Object} wpstats - Webpack stats object
+     * @return {string} - Trimmed warnings
+     */
+    const getWarningsWithoutHeading = ( wpstats ) => {
+        let warnings = wpstats.toString( { all : false, warnings : true } ).trim();
+        const prefix = warnings.indexOf( '\n' );
+        if ( prefix < 25 ) {
+            warnings = warnings.substr( prefix );
+        }
+        return warnings;
+    };
+
     // Begin processing
+    if ( swp.verbose ) {
+        cfx.info( 'Reading from: ' + stDi.show( [ path.resolve( source ), 'path' ], true ) );
+    }
     swp.strict && spinner.start( 'Building... ' );
     let stats;
     try {
@@ -233,13 +267,17 @@ module.exports = async function cli() {
         const info = stats.webpack.toJson( { all : false, assets : true, warnings : true } );
         if ( swp.verbose ) {
             if ( stats.webpack.hasWarnings() ) {
-                cfx.error( 'Webpack ' + stats.webpack.toString( { all : false, warnings : true } ) );
+                cfx.warn( 'Webpack warnings:' );
+                cfx.log( getWarningsWithoutHeading( stats.webpack ) );
                 cfx.success( 'Output files:' );
             }
             for ( let i = 0; i < info.assets.length; i++ ) {
                 cfx.info( getFileStats( info.assets[ i ] ).join( ' ' ) );
             }
+            cfx.info( 'Wrote to: ' + stDi.show( [ path.resolve( target ), 'path' ], true ) );
         }
+
+        // Show a few details at least when something was written
         cfx.success( 'simple-webpack wrote [ ' + info.assets.length
             + ' ] file' + ( info.assets.length === 1 ? '' : 's' )
             + ( swp.verbose ? ''
@@ -284,12 +322,7 @@ module.exports = async function cli() {
         }
 
         if ( !swp.verbose && stats.webpack.hasWarnings() ) {
-            let warnings = stats.webpack.toString( { all : false, warnings : true } ).trim();
-            const prefix = warnings.indexOf( '\n' );
-            if ( prefix < 25 ) {
-                warnings = warnings.substr( prefix );
-            }
-            so.Warnings = warnings;
+            so.Warnings = getWarningsWithoutHeading( stats.webpack );
         }
 
         // Show generated stats
