@@ -1,0 +1,45 @@
+{
+  "name": "@squirrel-forge/simple-webpack",
+  "version": "0.5.0",
+  "description": "A thin node wrapper for webpack with some basic options and configuration.",
+  "main": "src/classes/SimpleWebpack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "simple-webpack": "bin/cli"
+  },
+  "directories": {
+    "bin": "bin",
+    "src": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/squirrel-forge/node-simple-webpack.git"
+  },
+  "keywords": [
+    "cli",
+    "simple",
+    "webpack",
+    "build"
+  ],
+  "author": "Daniel Hartwell <me@siux.info> (http://siux.info)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/squirrel-forge/node-simple-webpack/issues"
+  },
+  "homepage": "https://github.com/squirrel-forge/node-simple-webpack#readme",
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@squirrel-forge/node-cfx": "^1.1.0",
+    "@squirrel-forge/node-util": "^1.1.2",
+    "babel-loader": "^8.2.3",
+    "eslint": "^7.32.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "webpack": "^5.65.0"
+  }
+}
