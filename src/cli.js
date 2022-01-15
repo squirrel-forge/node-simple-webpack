@@ -3,7 +3,7 @@
  */
 const path = require( 'path' );
 const { cfx } = require( '@squirrel-forge/node-cfx' );
-const { CliInput, Progress, Timer, leadingZeros, StatsDisplay, convertBytes } = require( '@squirrel-forge/node-util' );
+const { CliInput, Progress, Timer, leadingZeros, StatsDisplay, convertBytes, FsInterface } = require( '@squirrel-forge/node-util' );
 const SimpleWebpack = require( './classes/SimpleWebpack' );
 
 /**
@@ -59,6 +59,9 @@ module.exports = async function cli() {
         // Show config
         config : [ '-y', '--show-config', false, true ],
 
+        // Deploy defaults
+        defaults : [ ' ', '--defaults', false, true ],
+
         // Do not break on any error, disables the default strict if set
         loose : [ '-u', '--loose', false, true ],
 
@@ -82,6 +85,39 @@ module.exports = async function cli() {
         }
         cfx.log( pkg.name + '@' + pkg.version );
         cfx.info( '- Installed at: ' + install_dir );
+        process.exit( 0 );
+    }
+
+    // Deploy default configs
+    if ( options.defaults ) {
+
+        /**
+         * Deploy default config
+         * @param {string} name - Source name
+         * @param {string} read - Target name
+         * @return {Promise<void>} - May throw errors
+         */
+        const deployDefaultConfig = async( name, read ) => {
+            const data = require( './' + read );
+            const resolved = path.resolve( target, name );
+            const config_exists = await FsInterface.exists( resolved );
+            if ( config_exists ) {
+                cfx.error( 'Config file already exists: ' + resolved );
+            } else {
+                const wrote = await FsInterface.write( resolved, JSON.stringify( data, null, 2 ) );
+                if ( wrote ) {
+                    cfx.success( 'Created defaults config: ' + resolved );
+                } else {
+                    cfx.error( 'Failed to write config: ' + resolved );
+                }
+            }
+        };
+
+        // Deploy eslint
+        await deployDefaultConfig( '.eslintrc', 'eslintrc.json' );
+
+        // Deploy babel
+        await deployDefaultConfig( '.babelrc', 'babelrc.json' );
         process.exit( 0 );
     }
 
