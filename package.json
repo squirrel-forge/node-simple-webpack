@@ -1,6 +1,6 @@
 {
   "name": "@squirrel-forge/simple-webpack",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A thin node wrapper for webpack with some basic options and configuration.",
   "main": "src/classes/SimpleWebpack.js",
   "scripts": {
@@ -33,13 +33,14 @@
     "node": ">= 10.0.0"
   },
   "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.4",
+    "@babel/core": "^7.16.7",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/preset-env": "^7.16.8",
     "@squirrel-forge/node-cfx": "^1.1.0",
     "@squirrel-forge/node-util": "^1.2.0",
     "babel-loader": "^8.2.3",
     "eslint": "^7.32.0",
     "eslint-webpack-plugin": "^3.1.1",
-    "webpack": "^5.65.0"
+    "webpack": "^5.66.0"
   }
 }
