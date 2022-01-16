@@ -42,20 +42,21 @@ the source argument is omitted and assumed to be the current working directory.
 
 A long option always override the value of a short option if both are used.
 
-| Short | Long          | Type     | Description                                                      |
-|-------|---------------|----------|------------------------------------------------------------------|
-| -d    | --development | bool     | Development mode                                                 |
-| -p    | --production  | bool     | Production mode                                                  |
-| -b    | --bundle      | bool     | Bundle all files in one entry                                    |
-| -n    | --name        | str      | Bundle name, default: 'bundle'                                   |
-|       | --index       | bool     | Source loaded as recursive index                                 |
-| -w    | --colors      | str, ... | Define verbose listing color kib limits, must be 3 integers > 0  |
-| -y    | --show-config | bool     | Show options, source, target and generated webpack config        |
-|       | --defaults    | bool     | Deploy default .eslintrc and .babelrc to cwd or target directory |
-| -s    | --stats       | bool     | Show stats output                                                |
-| -i    | --verbose     | bool     | Show additional info                                             |
-| -u    | --loose       | bool     | Run in loose mode, disables the strict option                    |
-| -v    | --version     | bool     | Show the application version                                     |
+| Short | Long          | Type     | Description                                                                                                                             |
+|-------|---------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| -d    | --development | bool     | Development mode                                                                                                                        |
+| -p    | --production  | bool     | Production mode                                                                                                                         |
+| -b    | --bundle      | bool     | Bundle all files in one entry                                                                                                           |
+| -n    | --name        | str      | Bundle name, default: 'bundle'                                                                                                          |
+|       | --index       | bool     | Source loaded as recursive index                                                                                                        |
+| -w    | --colors      | str, ... | Define verbose listing color kib limits, must be 3 integers > 0                                                                         |
+| -y    | --show-config | bool     | Show options, source, target and generated webpack config                                                                               |
+|       | --defaults    | bool     | Deploy default .eslintrc and .babelrc to cwd or target directory                                                                        |
+| -s    | --stats       | bool     | Show stats output                                                                                                                       |
+| -a    | --analyze     | bool/str | Use a bool for a *static* report or *json/disabled*, the *server* option is not supported, use with *--stats* for additional stats.json |
+| -i    | --verbose     | bool     | Show additional info                                                                                                                    |
+| -u    | --loose       | bool     | Run in loose mode, disables the strict option                                                                                           |
+| -v    | --version     | bool     | Show the application version                                                                                                            |
 
 ## NPM scripts
 
