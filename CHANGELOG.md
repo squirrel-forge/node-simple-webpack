@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.7.1
+ - Update *node-util* to fix progress display issues with colliding output.
+
 ## 0.7.0
  - Added *webpack-bundle-analyzer* plugin and options.
 
