@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.7.0
+ - Added *webpack-bundle-analyzer* plugin and options.
+
 ## 0.6.0
  - Added default configs *.eslintrc* and *.babelrc* deployable with the *--defaults* option.
  - Updated some dependencies.
