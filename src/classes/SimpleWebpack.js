@@ -4,6 +4,7 @@
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const ESLintPlugin = require( 'eslint-webpack-plugin' );
+const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 const { Exception, Timer, FsInterface, isPojo } = require( '@squirrel-forge/node-util' );
 
 /**
@@ -72,6 +73,14 @@ class SimpleWebpack {
          * @type {boolean}
          */
         this.production = process.env.NODE_ENV === 'production';
+
+        /**
+         * Analyzer options
+         * @public
+         * @property
+         * @type {Object}
+         */
+        this.analyzer = null;
     }
 
     /**
@@ -253,6 +262,31 @@ class SimpleWebpack {
             optimization : { minimize : this.production },
         };
 
+        // Add analyzer plugin if options available
+        if ( this.analyzer ) {
+
+            // If we have true but invalid analyzer options
+            if ( !isPojo( this.analyzer ) ) {
+
+                // Error if not a boolean in strict mode
+                if ( this.analyzer !== true ) {
+                    this.error( new SimpleWebpackException( 'Invalid analyzer config' ), false );
+                }
+
+                // Set default config
+                this.analyzer = {
+                    analyzerMode : 'static',
+                    defaultSizes : 'gzip',
+                };
+            }
+
+            // Always force silent if in strict mode
+            if ( this.strict ) {
+                this.analyzer.logLevel = 'silent';
+            }
+            config.plugins.push( new BundleAnalyzerPlugin( this.analyzer ) );
+        }
+
         // Custom extend
         if ( typeof options.extend === 'function' ) {
             options.extend( config, source, target, this );
@@ -320,7 +354,7 @@ class SimpleWebpack {
      */
     _compile( config, statsOptions = null ) {
         return new Promise( ( resolve ) => {
-            webpack( config, ( err, stats ) => {
+            webpack( config, async function _webpack_complete( err, stats ) {
                 if ( err || stats.hasErrors() ) {
                     if ( err ) {
                         resolve( new SimpleWebpackException( 'Compile error', err ) );

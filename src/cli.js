@@ -35,6 +35,9 @@ module.exports = async function cli() {
         // Show more output
         stats : [ '-s', '--stats', false, true ],
 
+        // Use analyzer
+        analyze : [ '-a', '--analyze', null, false ],
+
         // Show more output
         verbose : [ '-i', '--verbose', false, true ],
 
@@ -134,6 +137,29 @@ module.exports = async function cli() {
         swp.production = true;
     } else if ( options.dev ) {
         swp.production = false;
+    }
+
+    // Get analyze as boolean flag if empty
+    if ( !options.analyze ) {
+        const ana = input.getFlagsOptions( { analyze : [ '-a', '--analyze', false, true ] } );
+
+        // Enable all if set as boolean flag
+        if ( ana.analyze ) {
+            options.analyze = 'static';
+        }
+    }
+
+    // Enable bundle analyzer
+    if ( options.analyze ) {
+        if ( options.analyze === 'server' ) {
+            cfx.error( 'WebpackBundleAnalyzer.analyzerMode = "server" is currently not supported' );
+            process.exit( 1 );
+        }
+        swp.analyzer = {
+            analyzerMode : options.analyze,
+            generateStatsFile : options.stats,
+            defaultSizes : 'gzip',
+        };
     }
 
     // Index source mode
