@@ -63,6 +63,9 @@ module.exports = async function cli() {
         // Extend config
         extend : [ '-e', '--extend', null, true, true ],
 
+        // Prepend to entries
+        prepend : [ '-m', '--modules', null, false ],
+
         // Bundle all sources
         bundle : [ '-b', '--bundle', false, true ],
 
