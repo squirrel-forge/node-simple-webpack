@@ -11,7 +11,7 @@ const {
     StatsDisplay,
     convertBytes,
     FsInterface,
-    ms2hrtime,
+    convertMs2Hrtime,
     isPojo,
 } = require( '@squirrel-forge/node-util' );
 const SimpleWebpack = require( './classes/SimpleWebpack' );
@@ -325,16 +325,6 @@ module.exports = async function cli() {
     };
 
     /**
-     * Convert ms to hr time format
-     * @param {number} ms - Milliseconds
-     * @return {Array<number>} - Hrtime format
-     */
-    const ms2hrtime = ( ms ) => {
-        const seconds = Math.floor( ms / 1000 );
-        return [ seconds, ( ms - seconds * 1000 ) * 1000000 ];
-    };
-
-    /**
      * Get webpack warnings without heading
      * @param {Object} wpstats - Webpack stats object
      * @return {string} - Trimmed warnings
@@ -421,7 +411,7 @@ module.exports = async function cli() {
                 Build : info.hash,
                 Files : [ [ 'Sources:', sources_count ], 'asline' ],
                 Time : [ stats.time, 'time' ],
-                Webpack : [ ms2hrtime( info.time ), 'time' ],
+                Webpack : [ convertMs2Hrtime( info.time ), 'time' ],
             },
         };
 
