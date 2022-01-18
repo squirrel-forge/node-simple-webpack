@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.7.1
+## 0.8.0
+ - Added *--no-minify* option to disable *optimization.minimize* in webpack config.
+ - Added *--extend* option to load a config extension via require, path/name customizable via the option.
+ - Added *webpack-merge* package to merge the extension config if it's an object, extend can also be a sync function that receives following arguments *(config, source, target, SimpleWebpack)* and must return the modified config object.
  - Update *node-util* to fix progress display issues with colliding output.
 
 ## 0.7.0
