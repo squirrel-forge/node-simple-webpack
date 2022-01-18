@@ -329,6 +329,10 @@ class SimpleWebpack {
                 const file = source.files[ i ];
                 const name = path.basename( file, path.extname( file ) );
                 entry[ name ] = file;
+                if ( options.prepend instanceof Array ) {
+                    entry[ name ] = [ entry[ name ] ];
+                    entry[ name ].unshift( ...options.prepend );
+                }
             }
         }
         return entry;
