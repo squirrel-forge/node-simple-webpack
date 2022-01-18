@@ -182,17 +182,17 @@ module.exports = async function cli() {
         swpOptions.source = 'index';
     }
 
-    // Bundle options
+    // Bundle option
     if ( options.bundle ) {
         swpOptions.name = options.name && options.name.length ? options.name : 'bundle';
+    }
 
-        // Prepend options
-        if ( options.prepend ) {
-            const prepend = options.prepend.split( ',' )
-                .filter( ( v ) => { return !!v.length; } );
-            if ( prepend.length ) {
-                swpOptions.prepend = prepend;
-            }
+    // Prepend option
+    if ( options.prepend ) {
+        const prepend = options.prepend.split( ',' )
+            .filter( ( v ) => { return !!v.length; } );
+        if ( prepend.length ) {
+            swpOptions.prepend = prepend;
         }
     }
 
