@@ -46,7 +46,7 @@ module.exports = async function cli() {
         stats : [ '-s', '--stats', false, true ],
 
         // Use analyzer
-        analyze : [ '-a', '--analyze', null, false ],
+        analyze : [ '-a', '--analyze', null, true, true ],
 
         // Show more output
         verbose : [ '-i', '--verbose', false, true ],
@@ -61,7 +61,7 @@ module.exports = async function cli() {
         nominify : [ '-n', '--no-minify', false, true ],
 
         // Extend config
-        extend : [ '-e', '--extend', null, false ],
+        extend : [ '-e', '--extend', null, true, true ],
 
         // Bundle all sources
         bundle : [ '-b', '--bundle', false, true ],
@@ -155,22 +155,21 @@ module.exports = async function cli() {
         swp.production = false;
     }
 
-    // Get analyze as boolean flag if empty
-    if ( !options.analyze ) {
-        const ana = input.getFlagsOptions( { analyze : [ '-a', '--analyze', false, true ] } );
-
-        // Enable all if set as boolean flag
-        if ( ana.analyze ) {
-            options.analyze = 'static';
-        }
-    }
-
     // Enable bundle analyzer
     if ( options.analyze ) {
+
+        // Enable all if set as boolean flag
+        if ( options.analyze === true ) {
+            options.analyze = 'static';
+        }
+
+        // Notify server option not supported
         if ( options.analyze === 'server' ) {
             cfx.error( 'WebpackBundleAnalyzer.analyzerMode = "server" is currently not supported' );
             process.exit( 1 );
         }
+
+        // Set analyzer options
         swp.analyzer = {
             analyzerMode : options.analyze,
             generateStatsFile : options.stats,
@@ -202,37 +201,33 @@ module.exports = async function cli() {
         swpOptions.minify = false;
     }
 
-    // Get extend options as boolean flag if empty
-    if ( !options.extend ) {
-        const ex = input.getFlagsOptions( { analyze : [ '-e', '--extend', false, true ] } );
-        options.extend = ex.analyze ? 'extend.webpack.config.js' : false;
-    }
-
     // Load extend options
     if ( options.extend ) {
-        const ex_exists = await FsInterface.exists( options.extend );
-        if ( ex_exists ) {
 
-            // Attempt load with require
-            let config_extend;
-            try {
-                config_extend = require( options.extend );
-            } catch ( e ) {
-                const error = new SimpleWebpack.SimpleWebpackException( 'Failed to load config extension', e );
-                cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
-                process.exit( 1 );
-            }
-
-            // Ensure basic format
-            if ( !( isPojo( config_extend ) || typeof config_extend === 'function' ) ) {
-                const error = new SimpleWebpack.SimpleWebpackException( 'Invalid extension format, must be a plain object' );
-                cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
-                process.exit( 1 );
-            }
-
-            // Set option with extension data
-            swpOptions.extend = config_extend;
+        // Set default extend if not specified
+        if ( options.extend === true ) {
+            options.extend = path.join( process.cwd(), 'extend.webpack.config.js' );
         }
+
+        // Attempt load with require
+        let config_extend;
+        try {
+            config_extend = require( options.extend );
+        } catch ( e ) {
+            const error = new SimpleWebpack.SimpleWebpackException( 'Failed to load config extension: ' + options.extend, e );
+            cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
+            process.exit( 1 );
+        }
+
+        // Ensure basic format
+        if ( !( isPojo( config_extend ) || typeof config_extend === 'function' ) ) {
+            const error = new SimpleWebpack.SimpleWebpackException( 'Invalid extension format, must be a plain object or function' );
+            cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
+            process.exit( 1 );
+        }
+
+        // Set option with extension data
+        swpOptions.extend = config_extend;
     }
 
     // Color warning option must be an Array
@@ -263,7 +258,7 @@ module.exports = async function cli() {
 
     // Show active config object
     if ( options.config ) {
-        const config = await swp.generateConfig( source, target, options );
+        const config = await swp.generateConfig( source, target, swpOptions );
         cfx.success( 'simple-webpack configuration:' );
         const entries = Object.entries( config );
         for ( let i = 0; i < entries.length; i++ ) {
