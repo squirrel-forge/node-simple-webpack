@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.8.2
+ - Fixed and extended missing *--modules* prepend option used to prepend polyfills or anything else to entries.
+
 ## 0.8.1
  - Update *node-util* and replace local implementation with *convertMs2Hrtime* method from utils.
  - Internal updates and cleanups for *--analyze* and *--extend* options.
