@@ -3,7 +3,17 @@
  */
 const path = require( 'path' );
 const { cfx } = require( '@squirrel-forge/node-cfx' );
-const { CliInput, Progress, Timer, leadingZeros, StatsDisplay, convertBytes, FsInterface } = require( '@squirrel-forge/node-util' );
+const {
+    CliInput,
+    Progress,
+    Timer,
+    leadingZeros,
+    StatsDisplay,
+    convertBytes,
+    FsInterface,
+    ms2hrtime,
+    isPojo,
+} = require( '@squirrel-forge/node-util' );
 const SimpleWebpack = require( './classes/SimpleWebpack' );
 
 /**
@@ -46,6 +56,12 @@ module.exports = async function cli() {
 
         // Force production mode
         prod : [ '-p', '--production', false, true ],
+
+        // Disable minification
+        nominify : [ '-n', '--no-minify', false, true ],
+
+        // Extend config
+        extend : [ '-e', '--extend', null, false ],
 
         // Bundle all sources
         bundle : [ '-b', '--bundle', false, true ],
@@ -178,6 +194,44 @@ module.exports = async function cli() {
             if ( prepend.length ) {
                 swpOptions.prepend = prepend;
             }
+        }
+    }
+
+    // Disable minification
+    if ( options.nominify ) {
+        swpOptions.minify = false;
+    }
+
+    // Get extend options as boolean flag if empty
+    if ( !options.extend ) {
+        const ex = input.getFlagsOptions( { analyze : [ '-e', '--extend', false, true ] } );
+        options.extend = ex.analyze ? 'extend.webpack.config.js' : false;
+    }
+
+    // Load extend options
+    if ( options.extend ) {
+        const ex_exists = await FsInterface.exists( options.extend );
+        if ( ex_exists ) {
+
+            // Attempt load with require
+            let config_extend;
+            try {
+                config_extend = require( options.extend );
+            } catch ( e ) {
+                const error = new SimpleWebpack.SimpleWebpackException( 'Failed to load config extension', e );
+                cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
+                process.exit( 1 );
+            }
+
+            // Ensure basic format
+            if ( !( isPojo( config_extend ) || typeof config_extend === 'function' ) ) {
+                const error = new SimpleWebpack.SimpleWebpackException( 'Invalid extension format, must be a plain object' );
+                cfx.log( swp._exceptionAsOutput( error, !swp.verbose ) );
+                process.exit( 1 );
+            }
+
+            // Set option with extension data
+            swpOptions.extend = config_extend;
         }
     }
 
