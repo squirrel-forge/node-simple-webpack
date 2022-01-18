@@ -2,6 +2,8 @@
 
 ## 0.8.1
  - Update *node-util* and replace local implementation with *convertMs2Hrtime* method from utils.
+ - Internal updates and cleanups for *--analyze* and *--extend* options.
+ - Improve README.md and some code docs.
 
 ## 0.8.0
  - Added *--no-minify* option to disable *optimization.minimize* in webpack config.
