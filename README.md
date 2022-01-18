@@ -1,5 +1,6 @@
 # @squirrel-forge/simple-webpack
 A thin node wrapper for webpack with some basic options and configuration.
+Includes a babel and eslint setup and supplies the webpack bundle analyzer.
 Made to be compatible with node ^10.0.0, might work on higher versions, but currently not supported or tested.
 
 ## Installation
@@ -46,6 +47,8 @@ A long option always override the value of a short option if both are used.
 |-------|---------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | -d    | --development | bool     | Development mode                                                                                                                        |
 | -p    | --production  | bool     | Production mode                                                                                                                         |
+| -n    | --no-minify   | bool     | Do not minify, sets the *optimization.minify* option to false                                                                           |
+| -e    | --extend      | bool/str | Extend the webpack config using *webpack-merge*, optionally specify a path, default: *extend.webpack.config.js*                         |
 | -b    | --bundle      | bool     | Bundle all files in one entry                                                                                                           |
 | -n    | --name        | str      | Bundle name, default: 'bundle'                                                                                                          |
 |       | --index       | bool     | Source loaded as recursive index                                                                                                        |
