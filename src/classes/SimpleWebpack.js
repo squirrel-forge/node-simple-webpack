@@ -3,8 +3,9 @@
  */
 const path = require( 'path' );
 const webpack = require( 'webpack' );
+const { merge } = require( 'webpack-merge' );
 const ESLintPlugin = require( 'eslint-webpack-plugin' );
-const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require( 'webpack-bundle-analyzer' );
 const { Exception, Timer, FsInterface, isPojo } = require( '@squirrel-forge/node-util' );
 
 /**
@@ -19,7 +20,8 @@ class SimpleWebpackException extends Exception {}
  * @property {null|string} name - Entry name for index and recursive mode bundling
  * @property {null|{exclude:RegExp,extensions:RegExp}} read - Source read options
  * @property {null|string} public - Webpack publicPath option
- * @property {null|Object|Function} extend - Extend the generated config
+ * @property {null|Object|Function} extend - Extend the generated config, Object is extended using webpack-merge
+ * @property {null|boolean} minify - Default null, derived from mode, set to true or false to override
  */
 
 /**
@@ -242,7 +244,7 @@ class SimpleWebpack {
         options = this._parseOptions( options );
         source = await this._resolveSource( source, options );
         target = await this._resolveTarget( target, options );
-        const config = {
+        let config = {
             mode : this.production ? 'production' : 'development',
             context : source.root,
             entry : this._getEntry( source, options ),
@@ -259,7 +261,7 @@ class SimpleWebpack {
                     }
                 ]
             },
-            optimization : { minimize : this.production },
+            optimization : { minimize : typeof options.minify === 'boolean' ? options.minify : this.production },
         };
 
         // Add analyzer plugin if options available
@@ -270,7 +272,7 @@ class SimpleWebpack {
 
                 // Error if not a boolean in strict mode
                 if ( this.analyzer !== true ) {
-                    this.error( new SimpleWebpackException( 'Invalid analyzer config' ), false );
+                    this.error( new SimpleWebpackException( 'Invalid analyzer config' ) );
                 }
 
                 // Set default config
@@ -288,10 +290,14 @@ class SimpleWebpack {
         }
 
         // Custom extend
-        if ( typeof options.extend === 'function' ) {
-            options.extend( config, source, target, this );
-        } else if ( isPojo( options.extend ) ) {
-            Object.assign( config, options.extend );
+        try {
+            if ( typeof options.extend === 'function' ) {
+                config = options.extend( config, source, target, this );
+            } else if ( isPojo( options.extend ) ) {
+                config = merge( config, options.extend );
+            }
+        } catch ( e ) {
+            this.error( new SimpleWebpackException( 'Failed to extend webpack config', e ) );
         }
         return { options, source, target, config };
     }
@@ -309,7 +315,7 @@ class SimpleWebpack {
         // Combine into one bundle entry
         if ( typeof options.name === 'string' ) {
             if ( !options.name.length ) {
-                throw new SimpleWebpackException( 'Entry name must be a none empty string' );
+                throw new SimpleWebpackException( 'Entry name must be a valid string' );
             }
             if ( options.prepend instanceof Array ) {
                 source.files.unshift( ...options.prepend );
