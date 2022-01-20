@@ -58,7 +58,7 @@ module.exports = async function cli() {
         prod : [ '-p', '--production', false, true ],
 
         // Disable minification
-        nominify : [ '-n', '--no-minify', false, true ],
+        nominify : [ ' ', '--no-minify', false, true ],
 
         // Extend config
         extend : [ '-e', '--extend', null, true, true ],
@@ -76,7 +76,7 @@ module.exports = async function cli() {
         index : [ ' ', '--index', false, true ],
 
         // Color limits
-        colors : [ '-w', '--colors', '', false ],
+        colors : [ ' ', '--colors', '', false ],
 
         // Show config
         config : [ '-y', '--show-config', false, true ],
