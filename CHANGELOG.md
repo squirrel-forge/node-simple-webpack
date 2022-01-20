@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.3
+ - Use option *-n* for bundle name, remove option for short *--no-minify* to remove conflict.
+ - Removed short option *-w* for *--colors* option, to free it for future use.
+ - Updated and fixed some README.md typos.
+
 ## 0.8.2
  - Fixed and extended missing *--modules* prepend option used to prepend polyfills or anything else to entries.
 
