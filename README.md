@@ -48,13 +48,13 @@ A long option always override the value of a short option if both are used.
 |-------|---------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
 | -d    | --development | bool     | Development mode                                                                                                                        |
 | -p    | --production  | bool     | Production mode                                                                                                                         |
-| -n    | --no-minify   | bool     | Do not minify, sets the *optimization.minify* option to false                                                                           |
+|       | --no-minify   | bool     | Do not minify, sets the *optimization.minify* option to false                                                                           |
 | -e    | --extend      | bool/str | Extend the webpack config using *webpack-merge*, optionally specify a path, default: cwd/*extend.webpack.config.js*                     |
 | -b    | --bundle      | bool     | Bundle all files in one entry                                                                                                           |
 | -n    | --name        | str      | Bundle name, default: 'bundle'                                                                                                          |
-| -m    | --modules     | str      | Prepend modules to each entry                                                                                                           |
+| -m    | --modules     | str, ... | Prepend modules to each entry                                                                                                           |
 |       | --index       | bool     | Recursively loads all *index.js* files from the source directory                                                                        |
-| -w    | --colors      | str, ... | Define verbose listing color kib limits, must be 3 integers > 0                                                                         |
+|       | --colors      | str, ... | Define verbose listing color kib limits, must be 3 integers > 0                                                                         |
 | -y    | --show-config | bool     | Show options, source, target and generated webpack config                                                                               |
 |       | --defaults    | bool     | Deploy default .eslintrc and .babelrc to cwd or target directory                                                                        |
 | -s    | --stats       | bool     | Show stats output                                                                                                                       |
