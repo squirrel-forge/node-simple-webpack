@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.8.4
+ - Updated dependencies.
+
 ## 0.8.3
  - Use option *-n* for bundle name, remove option for short *--no-minify* to remove conflict.
  - Removed short option *-w* for *--colors* option, to free it for future use.

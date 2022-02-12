@@ -8,7 +8,6 @@ Made to be compatible with node ^10.0.0, might work on higher versions, but curr
 
 ```
 npm i @squirrel-forge/simple-webpack
-
 ```
 
 ## cli usage
@@ -17,7 +16,6 @@ If you installed globally with the *-g* option.
 ```
 simple-webpack target -b --boolean --str=str
 simple-webpack source target -b --boolean --str=str
-
 ```
 
 For local installations use *npx* to run the simple-webpack executable.
