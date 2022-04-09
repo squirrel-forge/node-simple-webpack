@@ -60,6 +60,9 @@ module.exports = async function cli() {
         // Disable minification
         nominify : [ ' ', '--no-minify', false, true ],
 
+        // Disable minification
+        keepnames : [ ' ', '--keep-names', false, true ],
+
         // Extend config
         extend : [ '-e', '--extend', null, true, true ],
 
@@ -202,6 +205,11 @@ module.exports = async function cli() {
     // Disable minification
     if ( options.nominify ) {
         swpOptions.minify = false;
+    }
+
+    // Terser keep names options
+    if ( swpOptions.minify && options.keepnames ) {
+        swpOptions.keepnames = true;
     }
 
     // Load extend options

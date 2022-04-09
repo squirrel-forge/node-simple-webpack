@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+ - Added babel native transform support and updated babelrc.
+ - Added TerserPlugin with *--keep-names* cli option.
+ - Updated dependencies.
+
 ## 0.8.4
  - Updated dependencies.
 

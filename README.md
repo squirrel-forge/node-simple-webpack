@@ -47,6 +47,7 @@ A long option always override the value of a short option if both are used.
 | -d    | --development | bool     | Development mode                                                                                                                        |
 | -p    | --production  | bool     | Production mode                                                                                                                         |
 |       | --no-minify   | bool     | Do not minify, sets the *optimization.minify* option to false                                                                           |
+|       | --keep-names  | bool     | Add terser with keep names options                                                                                                      |
 | -e    | --extend      | bool/str | Extend the webpack config using *webpack-merge*, optionally specify a path, default: cwd/*extend.webpack.config.js*                     |
 | -b    | --bundle      | bool     | Bundle all files in one entry                                                                                                           |
 | -n    | --name        | str      | Bundle name, default: 'bundle'                                                                                                          |

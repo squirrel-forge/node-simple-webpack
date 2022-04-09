@@ -4,6 +4,7 @@
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 const { merge } = require( 'webpack-merge' );
+const TerserPlugin = require( 'terser-webpack-plugin' );
 const ESLintPlugin = require( 'eslint-webpack-plugin' );
 const { BundleAnalyzerPlugin } = require( 'webpack-bundle-analyzer' );
 const { Exception, Timer, FsInterface, isPojo } = require( '@squirrel-forge/node-util' );
@@ -264,6 +265,18 @@ class SimpleWebpack {
             },
             optimization : { minimize : typeof options.minify === 'boolean' ? options.minify : this.production },
         };
+
+        // Add terser with keep names options
+        if ( config.optimization.minimize && options.keepnames ) {
+            config.optimization.minimizer = [
+                new TerserPlugin( {
+                    terserOptions : {
+                        keep_classnames : true,
+                        keep_fnames : /^(?!_).+/,
+                    },
+                } ),
+            ];
+        }
 
         // Add analyzer plugin if options available
         if ( this.analyzer ) {
