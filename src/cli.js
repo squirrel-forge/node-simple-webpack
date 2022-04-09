@@ -208,9 +208,7 @@ module.exports = async function cli() {
     }
 
     // Terser keep names options
-    if ( swpOptions.minify && options.keepnames ) {
-        swpOptions.keepnames = true;
-    }
+    swpOptions.keepnames = options.keepnames;
 
     // Load extend options
     if ( options.extend ) {
