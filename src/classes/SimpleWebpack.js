@@ -182,7 +182,7 @@ class SimpleWebpack {
                     }
 
                     // Set the index mode options
-                    options.read = { exclude : /^(?!.*index).*\.js$/, extensions : /\.js/ };
+                    options.read = { exclude : /^(?!.*index).*\.js$/, extensions : /^\.js$/ };
                 }
                 files = FsInterface.fileList( resolved, options.read );
             } else {

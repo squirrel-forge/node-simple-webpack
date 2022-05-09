@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.2
+ - Fixed *index* mode default read options.
+ - Updated dependencies.
+
 ## 0.9.1
  - Fixed *--keep-names* cli option.
 
