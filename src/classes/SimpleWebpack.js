@@ -21,6 +21,7 @@ class SimpleWebpackException extends Exception {}
  * @property {null|string} name - Entry name for index and recursive mode bundling
  * @property {null|{exclude:RegExp,extensions:RegExp}} read - Source read options
  * @property {null|Array<string>} prepend - Prepend to entries
+ * @property {null|boolean|string} devtool - Webpack devtool setting
  * @property {null|string} public - Webpack publicPath option
  * @property {null|Object|Function} extend - Extend the generated config, Object is extended using webpack-merge
  * @property {null|boolean} minify - Default null, derived from mode, set to true or false to override
@@ -265,6 +266,9 @@ class SimpleWebpack {
             },
             optimization : { minimize : typeof options.minify === 'boolean' ? options.minify : this.production },
         };
+
+        // Devtool settings
+        if ( options.devtool ) config.devtool = options.devtool;
 
         // Add terser with keep names options
         if ( config.optimization.minimize && options.keepnames ) {
