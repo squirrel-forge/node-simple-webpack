@@ -4,11 +4,13 @@
       "@babel/preset-env",
       {
         "targets": {"browsers": [ "> 2%", "last 2 versions", "not ie <= 11" ]},
-        "modules": false
+        "modules": false,
+        "useBuiltIns": "usage"
       }
     ]
   ],
   "plugins": [
+    "@babel/plugin-transform-regenerator",
     [ "babel-plugin-transform-builtin-extend", {
       "globals": [ "Error" ]
     } ]
