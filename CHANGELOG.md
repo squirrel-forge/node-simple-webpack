@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0
+ - Added async transform support.
+ - Added options for babel polyfill by usage.
+ - Migrate to *babel@7.18.x*.
+ - Updated dependencies.
+ - Fixed *default* directory read mode file extension matching.
+
 ## 0.9.2
  - Fixed *index* mode default read options.
  - Updated dependencies.
