@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.0
+ - Added *--map* option to enable default webpack devtool source maps.
+
 ## 0.10.0
  - Added async transform support.
  - Added options for babel polyfill by usage.
