@@ -63,6 +63,9 @@ module.exports = async function cli() {
         // Disable minification
         keepnames : [ ' ', '--keep-names', false, true ],
 
+        // Devtool setting
+        devtool : [ ' ', '--map', null, true, true ],
+
         // Extend config
         extend : [ '-e', '--extend', null, true, true ],
 
@@ -181,6 +184,15 @@ module.exports = async function cli() {
             generateStatsFile : options.stats,
             defaultSizes : 'gzip',
         };
+    }
+
+    // Source map/devtool settings
+    if ( options.devtool ) {
+        if ( typeof options.devtool === 'string' ) {
+            swpOptions.devtool = options.devtool;
+        } else {
+            swpOptions.devtool = swp.production ? 'source-map' : 'eval-source-map';
+        }
     }
 
     // Index source mode
