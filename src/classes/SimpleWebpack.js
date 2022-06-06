@@ -189,7 +189,7 @@ class SimpleWebpack {
 
                 // Set the default mode options
                 if ( !options.read ) {
-                    options.read = { extensions : /\.js/ };
+                    options.read = { extensions : /^\.js$/ };
                 }
                 files = await FsInterface.files( resolved, options.read );
             }
