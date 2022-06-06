@@ -52,6 +52,7 @@ A long option always override the value of a short option if both are used.
 | -b    | --bundle      | bool     | Bundle all files in one entry                                                                                                           |
 | -n    | --name        | str      | Bundle name, default: 'bundle'                                                                                                          |
 | -m    | --modules     | str, ... | Prepend modules to each entry                                                                                                           |
+|       | --map         | bool/str | Enable source map via webpack devtool setting                                                                                           |
 |       | --index       | bool     | Recursively loads all *index.js* files from the source directory                                                                        |
 |       | --colors      | str, ... | Define verbose listing color kib limits, must be 3 integers > 0                                                                         |
 | -y    | --show-config | bool     | Show options, source, target and generated webpack config                                                                               |
