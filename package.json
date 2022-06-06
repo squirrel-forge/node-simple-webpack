@@ -1,6 +1,6 @@
 {
   "name": "@squirrel-forge/simple-webpack",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "A thin node wrapper for webpack with some basic options and configuration.",
   "main": "src/classes/SimpleWebpack.js",
   "scripts": {
