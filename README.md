@@ -9,8 +9,9 @@ Supports up to es2021, includes a babel and eslint setup and supplies the webpac
 npm i @squirrel-forge/simple-webpack
 ```
 
-### Compatibility
- - **0.12.0** - current version supporting *node 10.x*.
+### Versions and compatibility
+ - **0.13.x** - last future version supporting *node 10.x*, see [compatibility notes](#compatibility).
+ - **0.12.x** - current version supporting *node 10.x*.
 
 ## cli usage
 
@@ -78,10 +79,11 @@ When installed locally use following scripts.
 ...
 ```
 
-## Setup examples
+## Compatibility
+**Note:** When using node 10 with later versions than *0.13.x* you must install *node-fetch@2.x* before installing the package to avoid incompatibilities, see [@squirrel-forge/node-util](https://github.com/squirrel-forge/node-util#optional-dependencies)'s optional dependencies.
 
+## Setup examples
 For now there are no explicit examples to show the different implementation possibilities, use the *-y* or *--show-config* option to see how the webpack, source and target config are generated.
 
 ## Api usage
-
 You can require the SimpleWebpack class in your node script and run it, change internal options and extend it easily, look at the cli implementation and code comments to understand what to run in which order, currently there will be no extended documentation on the js api, since code comments should be sufficient to understand what works in which way.
