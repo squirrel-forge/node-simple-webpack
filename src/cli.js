@@ -7,14 +7,16 @@ const {
     CliInput,
     Progress,
     Timer,
-    leadingZeros,
     StatsDisplay,
-    convertBytes,
-    FsInterface,
-    convertMs2Hrtime,
     isPojo,
+    rand,
 } = require( '@squirrel-forge/node-util' );
 const SimpleWebpack = require( './classes/SimpleWebpack' );
+const deployDefaultConfig = require( './functions/deployDefaultConfig' );
+const getWarningsWithoutHeading = require( './functions/getWarningsWithoutHeading' );
+const getFileStatsFn = require( './functions/getFileStatsFn' );
+const generateStats = require( './functions/generateStats' );
+const updateNotice = require( './functions/updateNotice' );
 
 /**
  * Simple webpack cli application
@@ -101,51 +103,41 @@ module.exports = async function cli() {
         process.exit( 1 );
     }
 
-    // Show version
-    if ( options.version ) {
-        const install_dir = path.resolve( __dirname, '../' );
-        let pkg;
+    // Check for updates
+    let lottery = false;
+    if ( !options.prod ) {
+        lottery = rand( 0, 20 ) === 0;
+    }
+
+    // Load local package
+    let pkg = null;
+    const install_dir = path.resolve( __dirname, '../' );
+    if ( options.version || lottery ) {
         try {
             pkg = require( path.join( install_dir, 'package.json' ) );
         } catch ( e ) {
             cfx.error( e );
             process.exit( 1 );
         }
+    }
+
+    // Show version
+    if ( options.version && pkg ) {
         cfx.log( pkg.name + '@' + pkg.version );
         cfx.info( '- Installed at: ' + install_dir );
+        await updateNotice( pkg, true );
         process.exit( 0 );
     }
 
     // Deploy default configs
     if ( options.defaults ) {
 
-        /**
-         * Deploy default config
-         * @param {string} name - Source name
-         * @param {string} read - Target name
-         * @return {Promise<void>} - May throw errors
-         */
-        const deployDefaultConfig = async( name, read ) => {
-            const data = require( './' + read );
-            const resolved = path.resolve( target, name );
-            const config_exists = await FsInterface.exists( resolved );
-            if ( config_exists ) {
-                cfx.error( 'Config file already exists: ' + resolved );
-            } else {
-                const wrote = await FsInterface.write( resolved, JSON.stringify( data, null, 2 ) );
-                if ( wrote ) {
-                    cfx.success( 'Created defaults config: ' + resolved );
-                } else {
-                    cfx.error( 'Failed to write config: ' + resolved );
-                }
-            }
-        };
-
         // Deploy eslint
-        await deployDefaultConfig( '.eslintrc', 'eslintrc.json' );
+        await deployDefaultConfig( '.eslintrc', 'eslintrc.json', target );
 
         // Deploy babel
-        await deployDefaultConfig( '.babelrc', 'babelrc.json' );
+        await deployDefaultConfig( '.babelrc', 'babelrc.json', target );
+        if ( lottery ) await updateNotice( pkg, options.loose && options.verbose );
         process.exit( 0 );
     }
 
@@ -270,7 +262,8 @@ module.exports = async function cli() {
         // Set default coloring limits
         options.colors = [ 200 * 1024, 400 * 1024, 500 * 1024 ];
     }
-    const [ mark_green, mark_yellow, mark_red ] = options.colors;
+    const [ green, yellow, red ] = options.colors;
+    const mark = { green, yellow, red };
 
     // Notify strict mode
     if ( swp.strict && swp.verbose ) {
@@ -288,71 +281,14 @@ module.exports = async function cli() {
             cfx.log( data );
         }
         cfx.log( '' );
+        if ( lottery ) await updateNotice( pkg, options.loose && options.verbose );
         process.exit( 0 );
     }
 
     // Init progress spinner, stats and count
     const spinner = new Progress();
     const stDi = new StatsDisplay( cfx );
-
-    /**
-     * Get file stats data as array
-     * @param {Object} asset - Webpack stats asset object
-     * @return {Array<string>} - Styled file stats parts
-     */
-    const getFileStats = ( asset ) => {
-        const output = [];
-
-        // Source chunks
-        output.push( '- ' + stDi.show( [ leadingZeros( asset.chunkNames.join( ', ' ), 14, ' ', true ), 'none' ], true ) );
-
-        // Make extra stats output
-        if ( options.stats ) {
-
-            // Begin bracket block
-            output.push( '[fred][[re]' );
-
-            // File size
-            if ( asset.size ) {
-                output.push( stDi.show( 'Output:', true ) );
-
-                // Show output size
-                let size_color = 'none';
-                if ( asset.size <= mark_green ) {
-                    size_color = 'valid';
-                } else if ( asset.size <= mark_yellow ) {
-                    size_color = 'notice';
-                } else if ( asset.size > mark_red ) {
-                    size_color = 'error';
-                }
-                output.push( stDi.show( [ leadingZeros( convertBytes( asset.size ), 11, ' ' ) + ' ', size_color ], true ) );
-            }
-
-            // End bracket block
-            output.push( '[fred]][re]' );
-        } else {
-            output.push( '[fred]>[re]' );
-        }
-
-        // Output file
-        output.push( stDi.show( [ './' + asset.name, 'path' ], true ) );
-
-        return output;
-    };
-
-    /**
-     * Get webpack warnings without heading
-     * @param {Object} wpstats - Webpack stats object
-     * @return {string} - Trimmed warnings
-     */
-    const getWarningsWithoutHeading = ( wpstats ) => {
-        let warnings = wpstats.toString( { all : false, warnings : true } ).trim();
-        const prefix = warnings.indexOf( '\n' );
-        if ( prefix < 25 ) {
-            warnings = warnings.substr( prefix );
-        }
-        return warnings;
-    };
+    const getFileStats = getFileStatsFn( stDi, options, mark );
 
     // Begin processing
     if ( swp.verbose ) {
@@ -411,47 +347,12 @@ module.exports = async function cli() {
 
     // Generate stats on request only
     if ( options.stats ) {
-        const info = stats.webpack.toJson( {
-            all : false,
-            assets : true,
-            colors : true,
-            entrypoints : true,
-            hash : true,
-            timings : true,
-            warnings : true,
-        } );
-
-        const sources_count = Object.keys( info.entrypoints ).length;
-        const so = {
-            Overview : {
-                Build : info.hash,
-                Files : [ [ 'Sources:', sources_count ], 'asline' ],
-                Time : [ stats.time, 'time' ],
-                Webpack : [ convertMs2Hrtime( info.time ), 'time' ],
-            },
-        };
-
-        if ( sources_count !== info.assets.length ) {
-            so.Overview.Files[ 0 ].push( 'Outputs:' );
-            so.Overview.Files[ 0 ].push( info.assets.length );
-        }
-
-        if ( !options.verbose ) {
-            const files_prop = 'Asset output details';
-            for ( let i = 0; i < info.assets.length; i++ ) {
-                if ( !so[ files_prop ] ) so[ files_prop ] = [];
-                so[ files_prop ].push( [ '[fcyan]' + getFileStats( info.assets[ i ] ).join( ' ' ), 'none' ] );
-            }
-            so[ files_prop ].push( '' );
-        }
-
-        if ( !swp.verbose && !swp.strict && stats.webpack.hasWarnings() ) {
-            so.Warnings = getWarningsWithoutHeading( stats.webpack );
-        }
+        const so = generateStats( options, swp, stats, getFileStats );
 
         // Show generated stats
         stDi.display( so );
     }
+    if ( lottery ) await updateNotice( pkg, options.loose && options.verbose );
 
     // End application
     process.exit( 0 );
