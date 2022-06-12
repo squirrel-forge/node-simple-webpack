@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.0
+ - Added lottery update notice check, and display update info on version output.
+ - Softened dependencies in preparation for node version updates.
+ - Updated terser keep function names option.
+ - Fixed *substr* with a clean *substring* call.
+ - Cleanup/separate cli internal structure.
+ - Fixed *.eslintrc* for es2021 support.
+
 ## 0.11.0
  - Added *--map* option to enable default webpack devtool source maps.
 
