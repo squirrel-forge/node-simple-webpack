@@ -30,6 +30,9 @@ module.exports = async function updateNotice( pkg, debug = false ) {
                     cfx.log( '' );
                     cfx[ style ]( '-'.repeat( msg.length ) );
                     cfx.info( msg );
+                    if ( remote.engines.node !== pkg.engines.node ) {
+                        cfx.warn( 'This update requires a different node version ' + remote.engines.node );
+                    }
                     cfx[ style ]( '-'.repeat( msg.length ) );
                 } else if ( debug ) {
                     cfx.log( '[fgreen]You are using the latest version: [fwhite]' + pkg.version );
