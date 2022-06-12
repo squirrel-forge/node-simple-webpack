@@ -2,13 +2,15 @@
 A thin node wrapper for webpack with some basic options and configuration.
 The implemented config only deals with javascript, no other formats are supported and must be added via the extend option.
 Supports up to es2021, includes a babel and eslint setup and supplies the webpack bundle analyzer.
-Made to be compatible with node ^10.0.0, might work on higher versions, but currently not supported or tested.
 
 ## Installation
 
 ```
 npm i @squirrel-forge/simple-webpack
 ```
+
+### Compatibility
+ - **0.12.0** - current version supporting *node 10.x*.
 
 ## cli usage
 
