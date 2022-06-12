@@ -4,7 +4,6 @@ The implemented config only deals with javascript, no other formats are supporte
 Supports up to es2021, includes a babel and eslint setup and supplies the webpack bundle analyzer.
 
 ## Installation
-
 ```
 npm i @squirrel-forge/simple-webpack
 ```
@@ -14,7 +13,6 @@ npm i @squirrel-forge/simple-webpack
  - **0.12.x** - current version supporting *node 10.x*.
 
 ## cli usage
-
 If you installed globally with the *-g* option.
 ```
 simple-webpack target -b --boolean --str=str
@@ -27,22 +25,18 @@ npx simple-webpack ...
 ```
 
 ### Arguments
-
 The source argument can be a single file path or folder.
 The target argument must be a directory and will be created if it does not exist.
 
 #### Using only one argument
-
 the source argument is omitted and assumed to be the current working directory.
 1. target - Path to write webpack asset files.
 
 #### Using two arguments
-
 1. source - Path from where to read, if a directory, files are handled as separated entry points.
 2. target - Path to write webpack asset files.
 
 ### Options
-
 A long option always override the value of a short option if both are used.
 
 | Short | Long          | Type     | Description                                                                                                                             |
@@ -64,10 +58,9 @@ A long option always override the value of a short option if both are used.
 | -a    | --analyze     | bool/str | Use a bool for a *static* report or *json/disabled*, the *server* option is not supported, use with *--stats* for additional stats.json |
 | -i    | --verbose     | bool     | Show additional info                                                                                                                    |
 | -u    | --loose       | bool     | Run in loose mode, disables the strict option                                                                                           |
-| -v    | --version     | bool     | Show the application version                                                                                                            |
+| -v    | --version     | bool     | Show the application version and check for updates                                                                                      |
 
 ## NPM scripts
-
 When installed locally use following scripts.
 
 ```
