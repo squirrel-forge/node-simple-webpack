@@ -276,7 +276,7 @@ class SimpleWebpack {
                 new TerserPlugin( {
                     terserOptions : {
                         keep_classnames : true,
-                        keep_fnames : /^(?!_).+/,
+                        keep_fnames : true,
                     },
                 } ),
             ];
