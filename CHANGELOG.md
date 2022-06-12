@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.1
+ - Update notify node version requirement change.
+
 ## 0.12.0
  - Added lottery update notice check, and display update info on version output.
  - Softened dependencies in preparation for node version updates.
