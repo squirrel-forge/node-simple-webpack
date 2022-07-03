@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.2
+ - Fixed node 10 dependencies for compatibility, warnings are still displayed, but compile works as expected.
+
 ## 0.12.1
  - Update notify node version requirement change.
 
