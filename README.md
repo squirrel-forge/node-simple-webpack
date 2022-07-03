@@ -9,8 +9,8 @@ npm i @squirrel-forge/simple-webpack
 ```
 
 ### Versions and compatibility
- - **0.13.x** - last future version supporting *node 10.x*, see [compatibility notes](#compatibility).
- - **0.12.x** - current version supporting *node 10.x*.
+ - **0.13.x** - future version supporting *node 12.x* and above.
+ - **0.12.x** - last version supporting *node 10.x*, see [compatibility notes](#compatibility).
 
 ## cli usage
 If you installed globally with the *-g* option.
@@ -73,7 +73,7 @@ When installed locally use following scripts.
 ```
 
 ## Compatibility
-**Note:** When using node 10 with later versions than *0.13.x* you must install *node-fetch@2.x* before installing the package to avoid incompatibilities, see [@squirrel-forge/node-util](https://github.com/squirrel-forge/node-util#optional-dependencies)'s optional dependencies.
+**Note:** When using node 10 you must use version *0.12.x*, critical fixes will be made if required, any new feature will only be available in higher versions.
 
 ## Setup examples
 For now there are no explicit examples to show the different implementation possibilities, use the *-y* or *--show-config* option to see how the webpack, source and target config are generated.
