@@ -1,6 +1,6 @@
 {
   "name": "@squirrel-forge/simple-webpack",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "description": "A thin node wrapper for webpack with some basic options and configuration.",
   "main": "src/classes/SimpleWebpack.js",
   "scripts": {
@@ -33,22 +33,22 @@
     "node": ">= 10.0.0"
   },
   "dependencies": {
-    "@babel/core": "^7.x",
-    "@babel/eslint-parser": "^7.x",
-    "@babel/plugin-transform-runtime": "^7.x",
-    "@babel/preset-env": "^7.x",
-    "@squirrel-forge/node-cfx": "^1.x",
-    "@squirrel-forge/node-util": "^1.x",
-    "babel-loader": "^8.x",
-    "babel-plugin-transform-builtin-extend": "^1.x",
-    "cli-spinner": "^0.2.x",
-    "directory-tree": "^3.x",
-    "eslint": "^7.x",
-    "eslint-webpack-plugin": "^3.x",
-    "intercept-stdout": "^0.1.x",
-    "node-fetch": "^2.x",
-    "webpack": "^5.x",
-    "webpack-bundle-analyzer": "^4.x",
-    "webpack-merge": "^5.x"
+    "@babel/core": "7.18.x",
+    "@babel/eslint-parser": "7.18.x",
+    "@babel/plugin-transform-runtime": "7.18.x",
+    "@babel/preset-env": "7.18.x",
+    "@squirrel-forge/node-cfx": "1.x",
+    "@squirrel-forge/node-util": "1.x",
+    "babel-loader": "8.2.x",
+    "babel-plugin-transform-builtin-extend": "1.1.x",
+    "cli-spinner": "0.2.x",
+    "directory-tree": "3.x",
+    "eslint": "7.32.x",
+    "eslint-webpack-plugin": "3.1.1",
+    "intercept-stdout": "0.1.x",
+    "node-fetch": "2.x",
+    "webpack": "5.73.x",
+    "webpack-bundle-analyzer": "4.5.x",
+    "webpack-merge": "5.8.x"
   }
 }
