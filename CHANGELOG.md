@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.12.3
+ - Fixed broken path to deploy defaults by flag option.
+
 ## 0.12.2
  - Fixed node 10 dependencies for compatibility, warnings are still displayed, but compile works as expected.
 
