@@ -19,6 +19,7 @@ module.exports = async function updateNotice( pkg, debug = false ) {
 
                 // Check if there is an update available
                 if ( semver.gt( remote.version, pkg.version ) ) {
+                    const msg_offset = '[fwhite][fgreen][fcyan][fwhite][fcyan][fwhite]';
                     const msg = ' [fwhite]' + pkg.name + '[fgreen] update available [fcyan]from [fwhite]'
                         + pkg.version + '[fcyan] to [fwhite]' + remote.version + ' ';
                     let style = 'info';
@@ -28,12 +29,12 @@ module.exports = async function updateNotice( pkg, debug = false ) {
                         style = 'warn';
                     }
                     cfx.log( '' );
-                    cfx[ style ]( '-'.repeat( msg.length ) );
+                    cfx[ style ]( '-'.repeat( msg.length - msg_offset.length ) );
                     cfx.info( msg );
                     if ( remote.engines.node !== pkg.engines.node ) {
                         cfx.warn( 'This update requires a different node version ' + remote.engines.node );
                     }
-                    cfx[ style ]( '-'.repeat( msg.length ) );
+                    cfx[ style ]( '-'.repeat( msg.length - msg_offset.length ) );
                 } else if ( debug ) {
                     cfx.log( '[fgreen]You are using the latest version: [fwhite]' + pkg.version );
                 }
