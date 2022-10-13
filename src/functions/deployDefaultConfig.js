@@ -13,7 +13,7 @@ const { FsInterface } = require( '@squirrel-forge/node-util' );
  * @return {Promise<void>} - May throw errors
  */
 module.exports = async function deployDefaultConfig( name, read, target ) {
-    const data = require( './' + read );
+    const data = require( '../' + read );
     const resolved = path.resolve( target, name );
     const config_exists = await FsInterface.exists( resolved );
     if ( config_exists ) {
